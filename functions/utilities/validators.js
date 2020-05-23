@@ -31,11 +31,11 @@ exports.validateSignupData = (newUser) => {
   }
 }
 
-exports.validateLoginData = (user) => {
+exports.validateLoginData = (data) => {
   let loginErrors = {}
 
-  if (isEmpty(user.email)) loginErrors.email = 'Must to be empty';
-  if (isEmpty(user.password)) loginErrors.password = 'Must to be empty';
+  if (isEmpty(data.email)) loginErrors.email = 'Must not be empty';
+  if (isEmpty(data.password)) loginErrors.password = 'Must not be empty';
 
   return {
     loginErrors,
@@ -52,4 +52,11 @@ exports.validateNetworthForm = (newSnapshot) => {
     snapshotErrors,
     valid: Object.keys(snapshotErrors).length === 0 ? true : false
   }
+}
+
+exports.reduceUserDetails = (data) => {
+  let userDetails = {};
+  if (!isEmpty(data.goal.trim())) userDetails.goal = data.goal;
+
+  return userDetails;
 }

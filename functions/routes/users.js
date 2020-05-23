@@ -4,7 +4,7 @@ const config = require('../utilities/config')
 const firebase = require('firebase');
 firebase.initializeApp(config);
 
-const { validateSignupData, validateLoginData } = require('../utilities/validators');
+const { validateSignupData, validateLoginData, reduceUserDetails } = require('../utilities/validators');
 
 exports.signup = (req, res) => {
   const newUser = {
@@ -76,4 +76,34 @@ exports.login = (req, res) => {
       console.error(err);
       return res.status(403).json({ general: 'Incorrect credentials, please try again' })
     });
+}
+
+// add user details
+exports.addUserDetails = (req, res) => {
+  let userDetails = reduceUserDetails(req.body);
+
+  db.doc(`/users/${req.user.userName}`).update(userDetails)
+    .then(() => {
+      return res.json({ message: 'Details updated successfully' });
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ error: err.code })
+    })
+}
+
+// Get user credential details
+exports.getAuthenticatedUser = (req, res) => {
+  let userData = {};
+  db.doc(`/users/${req.user.userName}`).get()
+    .then(doc => {
+      if (doc.exists) {
+        userData.credentials = doc.data();
+        return res.json(userData);
+      }
+    })
+    .catch(err => {
+      console.error(err)
+      return res.status(500).json({ error: err.code })
+    })
 }

@@ -8,3 +8,12 @@ let db = {
     }
   ]
 }
+const userDetails = {
+  // Redux data
+  credentials: {
+    userId: 'N43KJ5H43KJHREW4J5H3JWMERHB',
+    email: 'user@email.com',
+    userName: 'user',
+    goal: '900000'
+  }
+}
